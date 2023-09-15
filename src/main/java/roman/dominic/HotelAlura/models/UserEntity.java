@@ -13,15 +13,15 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String userName;
+    private String user_name;
 
     private String password;
 
     private String role;
 
-    private LocalDateTime createAd;
+    private LocalDateTime create_ad;
 
-    @ManyToOne(targetEntity = roman.dominic.HotelAlura.models.GuestEntity.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "guest_fk")
-    private roman.dominic.HotelAlura.models.GuestEntity guest;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "guest_id", unique = true)
+    private GuestEntity guest;
 }

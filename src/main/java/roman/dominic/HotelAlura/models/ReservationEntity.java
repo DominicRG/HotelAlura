@@ -16,11 +16,11 @@ public class ReservationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime entryDate;
+    private LocalDateTime entry_date;
 
-    private LocalDateTime retireDate;
+    private LocalDateTime retire_date;
 
     private double value;
 
-    private String wayToPay;
+    private String way_to_pay;
 }

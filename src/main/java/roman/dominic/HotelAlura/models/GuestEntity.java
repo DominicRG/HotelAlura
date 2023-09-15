@@ -1,9 +1,6 @@
 package roman.dominic.HotelAlura.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -18,11 +15,14 @@ public class GuestEntity {
 
     private String name;
 
-    private String lastName;
+    private String last_name;
 
     private LocalDateTime birthdate;
 
     private String nationality;
 
     private String phone;
+
+    @OneToOne(mappedBy = "guest", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private UserEntity user;
 }
