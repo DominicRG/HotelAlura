@@ -9,6 +9,7 @@ public class ReservationParticipationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @ManyToOne(targetEntity = roman.dominic.HotelAlura.models.ReservationEntity.class, fetch = FetchType.EAGER)
@@ -19,5 +20,6 @@ public class ReservationParticipationEntity {
     @JoinColumn(name = "guest_id")
     private roman.dominic.HotelAlura.models.GuestEntity guest;
 
+    @Column(name = "role")
     private String role;
 }

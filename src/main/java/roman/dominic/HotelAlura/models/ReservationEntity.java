@@ -1,12 +1,10 @@
 package roman.dominic.HotelAlura.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity(name = "reservation")
 @Data
@@ -14,13 +12,20 @@ public class ReservationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    private LocalDateTime entry_date;
+    @Column(name = "entry_date")
+    @JsonFormat(pattern = "yyyy-MM-dd") // Define el formato deseado
+    private LocalDate entryDate;
 
-    private LocalDateTime retire_date;
+    @Column(name = "retire_date")
+    @JsonFormat(pattern = "yyyy-MM-dd") // Define el formato deseado
+    private LocalDate retireDate;
 
+    @Column(name = "value")
     private double value;
 
-    private String way_to_pay;
+    @Column(name = "way_to_pay")
+    private String wayToPay;
 }
