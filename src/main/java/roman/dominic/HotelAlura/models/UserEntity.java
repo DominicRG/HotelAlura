@@ -21,8 +21,8 @@ public class UserEntity {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "role")
-    private String role;
+    /*@Column(name = "role")
+    private String role;*/
 
     @Column(name = "create_ad")
     @JsonFormat(pattern = "yyyy-MM-dd") // Define el formato deseado
