@@ -33,4 +33,16 @@ public class GuestEntity {
 
     @OneToOne(mappedBy = "guest", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private UserEntity user;
+
+    @Override
+    public String toString() {
+        return "GuestEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthdate=" + birthdate +
+                ", nationality='" + nationality + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
+    }
 }

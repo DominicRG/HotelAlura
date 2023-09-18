@@ -28,7 +28,18 @@ public class UserEntity {
     @JsonFormat(pattern = "yyyy-MM-dd") // Define el formato deseado
     private LocalDate createAd;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "guest_id", unique = true)
     private GuestEntity guest;
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", createAd=" + createAd +
+                ", guest=" + guest +
+                '}';
+    }
 }

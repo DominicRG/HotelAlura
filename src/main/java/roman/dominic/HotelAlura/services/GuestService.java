@@ -15,4 +15,14 @@ public class GuestService implements IGuestService{
     public GuestEntity save(GuestEntity guestEntity) {
         return guestRepository.save(guestEntity);
     }
+
+    /*@Override
+    public boolean delete(Long id) {
+        if(guestRepository.existsById(id)){
+            guestRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
+    }*/
 }
