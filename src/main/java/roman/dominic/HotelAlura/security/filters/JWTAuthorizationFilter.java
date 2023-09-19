@@ -1,38 +1,37 @@
 package roman.dominic.HotelAlura.security.filters;
 
-import roman.dominic.HotelAlura.security.jwt.JWTUtil;
-import roman.dominic.HotelAlura.services.UserDetailServiceImpl;
-import org.springframework.stereotype.Component;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import roman.dominic.HotelAlura.security.jwt.JWTUtil;
+import roman.dominic.HotelAlura.services.UserDetailServiceImpl;
 
 import java.io.IOException;
 
 @Component
 public class JWTAuthorizationFilter extends OncePerRequestFilter{
-    @Autowired
     private JWTUtil jwtUtil;
-
-    @Autowired
     UserDetailServiceImpl userDetailServiceImpl;
 
-    @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request,
-                                    @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
+    @Autowired
+    public JWTAuthorizationFilter(JWTUtil jwtUtil, UserDetailServiceImpl userDetailServiceImpl) {
+        this.jwtUtil = jwtUtil;
+        this.userDetailServiceImpl = userDetailServiceImpl;
+    }
 
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String tokenHeader = request.getHeader("Authorization");
-        if(tokenHeader != null && tokenHeader.startsWith("Bearer ")){
+        if (tokenHeader != null && tokenHeader.startsWith("Bearer ")) {
             String token = tokenHeader.substring(7);
-            if(jwtUtil.isTokenValid(token)){
+            if (jwtUtil.isTokenValid(token)) {
                 String username = jwtUtil.getUsernameFromToken(token);
                 UserDetails userDetails = userDetailServiceImpl.loadUserByUsername(username);
 
@@ -45,4 +44,5 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter{
 
         filterChain.doFilter(request, response);
     }
+
 }
