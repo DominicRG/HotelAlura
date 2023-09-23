@@ -4,8 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import roman.dominic.HotelAlura.dto.UserDTO;
 import roman.dominic.HotelAlura.dto.UserDTOLogin;
+import roman.dominic.HotelAlura.dto.UserDTORegister;
+import roman.dominic.HotelAlura.dto.UserDTOUpdate;
 import roman.dominic.HotelAlura.exceptions.RegistroFallidoException;
 import roman.dominic.HotelAlura.models.GuestEntity;
 import roman.dominic.HotelAlura.models.UserEntity;
@@ -13,6 +14,7 @@ import roman.dominic.HotelAlura.repository.UserRepository;
 import roman.dominic.HotelAlura.security.jwt.JWTUtil;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 public class UserService implements IUserService{
@@ -31,14 +33,15 @@ public class UserService implements IUserService{
 
     @Override
     @Transactional
-    public UserEntity register(UserEntity userEntity) throws RegistroFallidoException {
-        GuestEntity guestRequest = userEntity.getGuest();
+    public UserEntity register(UserDTORegister userDTORegister) throws RegistroFallidoException {
+        GuestEntity guestRequest = new GuestEntity(userDTORegister.getGuest());
 
-        if(guestRequest!=null){
+        if(guestRequest != null){
             GuestEntity guestCreated = guestService.save(guestRequest);
             if(guestCreated!=null){
-                userEntity.getGuest().setId(guestCreated.getId());
+                var userEntity = new UserEntity(userDTORegister);
                 userEntity.setCreateAd(LocalDate.now());
+                userEntity.setGuest(guestCreated);
                 return userRepository.save(userEntity);
             } else {
                 throw new RegistroFallidoException("Error al crear el huésped");
@@ -61,12 +64,11 @@ public class UserService implements IUserService{
 
     @Override
     @Transactional
-    public UserEntity update(Long id, UserDTO userDTO) {
+    public UserEntity update(Long id, UserDTOUpdate userDTOUpdate) {
         UserEntity existingUserEntity = userRepository.findById(id).orElse(null);
 
         if(existingUserEntity != null){
-            existingUserEntity.setUserName(userDTO.getUserName());
-            System.out.println("POR SALIR DE SERVICE");
+            existingUserEntity.setUserName(userDTOUpdate.getUserName());
             return userRepository.save(existingUserEntity);
         }
 
@@ -88,5 +90,10 @@ public class UserService implements IUserService{
     @Override
     public String encodePassword(String password) {
         return passwordEncoder.encode(password);
+    }
+
+    @Override
+    public Optional<UserEntity> findById(Long id) {
+        return userRepository.findById(id);
     }
 }

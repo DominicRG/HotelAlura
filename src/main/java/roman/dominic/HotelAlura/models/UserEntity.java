@@ -3,11 +3,14 @@ package roman.dominic.HotelAlura.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import roman.dominic.HotelAlura.dto.UserDTORegister;
 
 import java.time.LocalDate;
 
 @Entity(name = "users")
 @Data
+@NoArgsConstructor
 public class UserEntity {
 
     @Id
@@ -31,6 +34,12 @@ public class UserEntity {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "guest_id", unique = true)
     private GuestEntity guest;
+
+    public UserEntity(UserDTORegister userDTORegister) {
+        this.userName = userDTORegister.getUserName();
+        this.password = userDTORegister.getPassword();
+        this.guest = new GuestEntity(userDTORegister.getGuest());
+    }
 
     @Override
     public String toString() {

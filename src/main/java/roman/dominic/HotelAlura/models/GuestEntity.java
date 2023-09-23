@@ -3,11 +3,15 @@ package roman.dominic.HotelAlura.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import roman.dominic.HotelAlura.dto.GuestDTOCreate;
+import roman.dominic.HotelAlura.dto.GuestDTOUpdate;
 
 import java.time.LocalDate;
 
 @Entity(name = "guest")
 @Data
+@NoArgsConstructor
 public class GuestEntity {
 
     @Id
@@ -34,6 +38,14 @@ public class GuestEntity {
     @OneToOne(mappedBy = "guest", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private UserEntity user;
 
+    public GuestEntity(GuestDTOCreate guestDTOCreate) {
+        this.name = guestDTOCreate.getName();
+        this.lastName = guestDTOCreate.getLastName();
+        this.birthdate = guestDTOCreate.getBirthdate();
+        this.nationality = guestDTOCreate.getNationality();
+        this.phone = guestDTOCreate.getPhone();
+    }
+
     @Override
     public String toString() {
         return "GuestEntity{" +
@@ -44,5 +56,13 @@ public class GuestEntity {
                 ", nationality='" + nationality + '\'' +
                 ", phone='" + phone + '\'' +
                 '}';
+    }
+
+    public void updateEntity(GuestDTOUpdate guestDTOUpdate) {
+        if(guestDTOUpdate.getName()!=null) this.name = guestDTOUpdate.getName();
+        if(guestDTOUpdate.getLastName()!=null) this.lastName = guestDTOUpdate.getLastName();
+        if(guestDTOUpdate.getBirthdate()!=null) this.birthdate = guestDTOUpdate.getBirthdate();
+        if(guestDTOUpdate.getNationality()!=null) this.nationality = guestDTOUpdate.getNationality();
+        if(guestDTOUpdate.getPhone()!=null) this.phone = guestDTOUpdate.getPhone();
     }
 }
