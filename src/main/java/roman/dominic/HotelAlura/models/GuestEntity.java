@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import roman.dominic.HotelAlura.dto.CompanionDTO;
 import roman.dominic.HotelAlura.dto.GuestDTOCreate;
 import roman.dominic.HotelAlura.dto.GuestDTOUpdate;
 
@@ -44,6 +45,12 @@ public class GuestEntity {
         this.birthdate = guestDTOCreate.getBirthdate();
         this.nationality = guestDTOCreate.getNationality();
         this.phone = guestDTOCreate.getPhone();
+    }
+
+    public GuestEntity(CompanionDTO companion) {
+        this.name = companion.getName();
+        this.lastName = companion.getLastname();
+        this.phone = companion.getPhone();
     }
 
     @Override

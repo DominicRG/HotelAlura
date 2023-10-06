@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import roman.dominic.HotelAlura.dto.*;
 import roman.dominic.HotelAlura.exceptions.RegistroFallidoException;
-import roman.dominic.HotelAlura.models.GuestEntity;
 import roman.dominic.HotelAlura.models.UserEntity;
 import roman.dominic.HotelAlura.services.IUserService;
 

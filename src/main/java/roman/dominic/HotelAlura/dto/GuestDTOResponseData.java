@@ -3,6 +3,7 @@ package roman.dominic.HotelAlura.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import roman.dominic.HotelAlura.models.GuestEntity;
 
 import java.time.LocalDate;
 
@@ -17,4 +18,12 @@ public class GuestDTOResponseData {
     private String nationality;
     private String phone;
 
+    public GuestDTOResponseData(GuestEntity guest) {
+        this.id = guest.getId();
+        this.name = guest.getName();
+        this.lastName = guest.getLastName();
+        this.birthdate = guest.getBirthdate();
+        this.nationality = guest.getNationality();
+        this.phone = guest.getPhone();
+    }
 }

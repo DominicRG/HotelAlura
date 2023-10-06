@@ -2,9 +2,11 @@ package roman.dominic.HotelAlura.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity(name = "reservation_participation")
 @Data
+@NoArgsConstructor
 public class ReservationParticipationEntity {
 
     @Id
@@ -22,4 +24,10 @@ public class ReservationParticipationEntity {
 
     @Column(name = "role")
     private String role;
+
+    public ReservationParticipationEntity(ReservationEntity reservation, GuestEntity guest, String role) {
+        this.reservation = reservation;
+        this.guest = guest;
+        this.role = role;
+    }
 }
