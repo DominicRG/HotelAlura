@@ -140,4 +140,11 @@ public class ReservationService implements IReservationService{
 
         return null;
     }
+
+    @Override
+    public Boolean removeCompanion(CompanionDTO companionDTO) {
+        GuestEntity companion = guestService.findByNameAndLastNameAndPhone(companionDTO.getName(),
+                companionDTO.getLastname(), companionDTO.getPhone());
+        return guestService.delete(companion.getId());
+    }
 }

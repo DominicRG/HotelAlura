@@ -13,4 +13,5 @@ public interface IGuestService {
     public boolean delete(Long id);
     Optional<GuestEntity> findById(Long id);
     List<GuestEntity> findCompanionGuestsByReservationId(Long id);
+    GuestEntity findByNameAndLastNameAndPhone(String name, String lastName, String phone);
 }

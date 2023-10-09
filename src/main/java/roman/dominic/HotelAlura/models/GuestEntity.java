@@ -9,6 +9,8 @@ import roman.dominic.HotelAlura.dto.GuestDTOCreate;
 import roman.dominic.HotelAlura.dto.GuestDTOUpdate;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "guest")
 @Data
@@ -38,6 +40,9 @@ public class GuestEntity {
 
     @OneToOne(mappedBy = "guest", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private UserEntity user;
+
+    @OneToMany(mappedBy = "guest", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReservationParticipationEntity> participations = new ArrayList<>();
 
     public GuestEntity(GuestDTOCreate guestDTOCreate) {
         this.name = guestDTOCreate.getName();

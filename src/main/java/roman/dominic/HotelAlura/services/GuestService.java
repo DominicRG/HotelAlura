@@ -52,4 +52,9 @@ public class GuestService implements IGuestService{
     public List<GuestEntity> findCompanionGuestsByReservationId(Long id) {
         return guestRepository.findCompanionGuestsByReservationId(id);
     }
+
+    @Override
+    public GuestEntity findByNameAndLastNameAndPhone(String name, String lastName, String phone) {
+        return guestRepository.findByNameAndLastNameAndPhone(name, lastName, phone);
+    }
 }

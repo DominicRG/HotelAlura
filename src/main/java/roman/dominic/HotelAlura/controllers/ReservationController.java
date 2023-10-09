@@ -105,4 +105,14 @@ public class ReservationController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @DeleteMapping("/companion")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Object> removeCompanion(@RequestBody CompanionDTO companionDTO){
+        if(reservationService.removeCompanion(companionDTO)){
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

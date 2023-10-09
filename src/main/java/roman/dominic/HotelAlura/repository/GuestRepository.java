@@ -17,4 +17,5 @@ public interface GuestRepository extends JpaRepository<GuestEntity, Long> {
         AND rp.role = 'COMPANION')
         """)
     List<GuestEntity> findCompanionGuestsByReservationId(Long reservationId);
+    GuestEntity findByNameAndLastNameAndPhone(String name, String lastName, String phone);
 }
