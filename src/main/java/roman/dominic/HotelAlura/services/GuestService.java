@@ -1,11 +1,13 @@
 package roman.dominic.HotelAlura.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import roman.dominic.HotelAlura.dto.GuestDTOUpdate;
 import roman.dominic.HotelAlura.models.GuestEntity;
 import roman.dominic.HotelAlura.repository.GuestRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -44,5 +46,10 @@ public class GuestService implements IGuestService{
     @Override
     public Optional<GuestEntity> findById(Long id) {
         return guestRepository.findById(id);
+    }
+
+    @Override
+    public List<GuestEntity> findCompanionGuestsByReservationId(Long id) {
+        return guestRepository.findCompanionGuestsByReservationId(id);
     }
 }

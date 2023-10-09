@@ -3,10 +3,7 @@ package roman.dominic.HotelAlura.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import roman.dominic.HotelAlura.dto.CompanionDTO;
-import roman.dominic.HotelAlura.dto.GuestDTOResponseData;
-import roman.dominic.HotelAlura.dto.ReservationDTORegister;
-import roman.dominic.HotelAlura.dto.ReservationDTOResponseData;
+import roman.dominic.HotelAlura.dto.*;
 import roman.dominic.HotelAlura.models.GuestEntity;
 import roman.dominic.HotelAlura.models.ReservationEntity;
 import roman.dominic.HotelAlura.models.ReservationParticipationEntity;
@@ -15,7 +12,6 @@ import roman.dominic.HotelAlura.models.enums.EROLE;
 import roman.dominic.HotelAlura.repository.ReservationRepository;
 import roman.dominic.HotelAlura.repository.UserRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,8 +81,9 @@ public class ReservationService implements IReservationService{
         List<ReservationParticipationEntity> participationEntityList = participationService.findByReservationId(id);
 
         if(!participationEntityList.isEmpty() && reservationRepository.findById(id).isPresent()){
+            System.out.println("ANTES");
             ReservationEntity reservation = reservationRepository.findById(id).get();
-            System.out.println(reservation);
+            System.out.println("DESPUES");
 
             GuestEntity guestHolder = participationEntityList.stream()
                     .filter(data -> "HOLDER".equals(data.getRole()))
@@ -103,6 +100,44 @@ public class ReservationService implements IReservationService{
                     reservation.getRetireDate(), reservation.getValue(), reservation.getWayToPay(),
                     new GuestDTOResponseData(guestHolder), companionDTOList);
         }
+        return null;
+    }
+
+    @Override
+    public Boolean delete(Long id) {
+        if(reservationRepository.existsById(id)){
+            //var listaDeAcompanantes = guestService.findCompanionGuestsByReservationId(id);
+            //System.out.println("ESTOS SON LOS DATOS CON EL QUERY:");
+            //listaDeAcompanantes.forEach(guestEntity -> System.out.println(guestEntity));
+
+
+            ReservationEntity reservation = reservationRepository.findById(id).get();
+            var listaDeAcompanantes = reservation.getParticipations().stream().
+                    filter(data -> "COMPANION".equals(data.getRole()))
+                    .map(ReservationParticipationEntity::getGuest)
+                            .toList();
+
+
+            System.out.println("ESTO ES LOS DATOS SOLO USANDO LA ENTIDAD:");
+            listaDeAcompanantes.forEach(guestEntity -> System.out.println(guestEntity));
+
+            reservationRepository.deleteById(id);
+            listaDeAcompanantes.forEach(companion -> guestService.delete(companion.getId()));
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public ReservationEntity update(Long id, ReservationDTOUptade reservationDTOUptade) {
+        ReservationEntity existingReservation = reservationRepository.findById(id).orElse(null);
+
+        if(existingReservation != null){
+            existingReservation.updateEntity(reservationDTOUptade, guestService, reservationRepository, participationService);
+            return reservationRepository.save(existingReservation);
+        }
+
         return null;
     }
 }
