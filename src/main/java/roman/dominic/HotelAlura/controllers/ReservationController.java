@@ -3,6 +3,9 @@ package roman.dominic.HotelAlura.controllers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,7 @@ import roman.dominic.HotelAlura.security.jwt.JWTUtil;
 import roman.dominic.HotelAlura.services.IReservationService;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/reservation")
@@ -114,5 +118,27 @@ public class ReservationController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Page<ReservationDTOListado>> listReservations(
+            @RequestParam(name = "id", required = false) Long id,
+            Pageable pageable){
+
+        Page<ReservationDTOListado> reservations = reservationService.findAll(pageable)
+                .map(ReservationDTOListado::new);
+
+        if (id != null) {
+            List<ReservationDTOListado> filteredReservations = reservations.stream()
+                    .filter(reservationDTO -> reservationDTO.getId() == id) // Filtrar por ID
+                    .toList();
+
+            if(filteredReservations.size() > 0){
+                reservations = new PageImpl<>(filteredReservations, pageable, filteredReservations.size());
+            }
+        }
+
+        return ResponseEntity.ok(reservations);
     }
 }

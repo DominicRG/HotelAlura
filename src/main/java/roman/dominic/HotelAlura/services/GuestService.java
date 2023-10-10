@@ -1,6 +1,8 @@
 package roman.dominic.HotelAlura.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import roman.dominic.HotelAlura.dto.GuestDTOUpdate;
@@ -56,5 +58,10 @@ public class GuestService implements IGuestService{
     @Override
     public GuestEntity findByNameAndLastNameAndPhone(String name, String lastName, String phone) {
         return guestRepository.findByNameAndLastNameAndPhone(name, lastName, phone);
+    }
+
+    @Override
+    public Page<GuestEntity> findAll(Pageable pageable) {
+        return guestRepository.findAll(pageable);
     }
 }

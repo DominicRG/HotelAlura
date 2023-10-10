@@ -2,6 +2,9 @@ package roman.dominic.HotelAlura.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -9,10 +12,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 import roman.dominic.HotelAlura.dto.GuestDTOCreate;
 import roman.dominic.HotelAlura.dto.GuestDTOResponseData;
 import roman.dominic.HotelAlura.dto.GuestDTOUpdate;
+import roman.dominic.HotelAlura.dto.ReservationDTOListado;
 import roman.dominic.HotelAlura.models.GuestEntity;
 import roman.dominic.HotelAlura.services.IGuestService;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/guest")
@@ -74,5 +79,25 @@ public class GuestController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Page<GuestDTOResponseData>> listGuests(
+            @RequestParam(name = "lastName", required = false) String lastName,
+            Pageable pageable){
+        Page<GuestDTOResponseData> guests = guestService.findAll(pageable)
+                .map(GuestDTOResponseData::new);
+
+        if (lastName != null) {
+            List<GuestDTOResponseData> filteredGuest = guests.stream()
+                    .filter(guestDTO -> guestDTO.getLastName().equals(lastName)) // Filtrar por lastName
+                    .toList();
+
+            if(filteredGuest.size() > 0){
+                guests = new PageImpl<>(filteredGuest, pageable, filteredGuest.size());
+            }
+        }
+        return ResponseEntity.ok(guests);
     }
 }

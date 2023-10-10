@@ -1,6 +1,8 @@
 package roman.dominic.HotelAlura.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import roman.dominic.HotelAlura.dto.*;
@@ -146,5 +148,10 @@ public class ReservationService implements IReservationService{
         GuestEntity companion = guestService.findByNameAndLastNameAndPhone(companionDTO.getName(),
                 companionDTO.getLastname(), companionDTO.getPhone());
         return guestService.delete(companion.getId());
+    }
+
+    @Override
+    public Page<ReservationEntity> findAll(Pageable pageable) {
+        return reservationRepository.findAll(pageable);
     }
 }
