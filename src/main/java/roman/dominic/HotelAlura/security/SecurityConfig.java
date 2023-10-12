@@ -41,6 +41,7 @@ public class SecurityConfig  {
         return httpSecurity
                 .csrf(config -> config.disable())
                 .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll();
                     //auth.requestMatchers("/swagger-ui/index.html#/").permitAll();
                     auth.anyRequest().permitAll();
                 })
